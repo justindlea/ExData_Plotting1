@@ -1,0 +1,15 @@
+setClass("myDate");
+setAs("character", "myDate", function(from) as.Date(from, format="%d/%m/%Y"));
+data<-read.delim("eda\\household_power_consumption.txt", sep=";", header=T, na.strings="?", colClasses=c('myDate', 'character', 'numeric', 'numeric', 'numeric', 'numeric', 'numeric', 'numeric', 'numeric'));
+data<-subset(data, Date>=as.Date("2007-02-01") & Date<=as.Date("2007-02-02"));
+data$datetime <- strptime(paste(data$Date, data$Time), format="%Y-%m-%d %H:%M:%S");
+png("ExData_Plotting1\\plot4.png");
+par(mfrow=c(2,2));
+plot(data$datetime, data$Global_active_power, type="l", xlab="", ylab="Global Active Power");
+plot(data$datetime, data$Voltage, type="l", xlab="datetime", ylab="Voltage");
+plot(data$datetime, data$Sub_metering_1, type="l", xlab="", ylab="Energy sub metering");
+lines(data$datetime, data$Sub_metering_2, col="red");
+lines(data$datetime, data$Sub_metering_3, col="blue");
+legend("topright", bty="n", col=c("black", "red", "blue"), c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), lty=c(1,1,1));
+plot(data$date, data$Global_reactive_power, type="l", xlab="datetime", ylab="Global_reactive_power");
+dev.off();
